@@ -2,24 +2,73 @@ class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
 
-        // Add nums2 elements into nums1
-        for (int i = 0; i < nums2.size(); i++) {
-            nums1.push_back(nums2[i]);
+        // Make nums1 the smaller array
+        if (nums1.size() > nums2.size()) {
+            return findMedianSortedArrays(nums2, nums1);
         }
 
-        // Sort nums1
-        sort(nums1.begin(), nums1.end());
+        int m = nums1.size();
+        int n = nums2.size();
 
-        int n = nums1.size();
+        int low = 0;
+        int high = m;
 
-        // Even number of elements
-        if (n % 2 == 0) {
-            return (nums1[n / 2 - 1] + nums1[n / 2]) / 2.0;
+        while (low <= high) {
+
+            int cut1 = (low + high) / 2;
+            int cut2 = (m + n + 1) / 2 - cut1;
+
+            int left1;
+            int right1;
+            int left2;
+            int right2;
+
+            if (cut1 == 0)
+                left1 = INT_MIN;
+            else
+                left1 = nums1[cut1 - 1];
+
+            if (cut1 == m)
+                right1 = INT_MAX;
+            else
+                right1 = nums1[cut1];
+
+            if (cut2 == 0)
+                left2 = INT_MIN;
+            else
+                left2 = nums2[cut2 - 1];
+
+            if (cut2 == n)
+                right2 = INT_MAX;
+            else
+                right2 = nums2[cut2];
+
+            // Correct partition
+            if (left1 <= right2 && left2 <= right1) {
+
+                // Total number of elements is even
+                if ((m + n) % 2 == 0) {
+                    return (max(left1, left2) +
+                            min(right1, right2)) / 2.0;
+                }
+
+                // Total number of elements is odd
+                else {
+                    return max(left1, left2);
+                }
+            }
+
+            // Move partition in nums1 to the right
+            else if (left1 > right2) {
+                high = cut1 - 1;
+            }
+
+            // Move partition in nums1 to the left
+            else {
+                low = cut1 + 1;
+            }
         }
 
-        // Odd number of elements
-        else {
-            return nums1[n / 2];
-        }
+        return 0.0;
     }
 };
