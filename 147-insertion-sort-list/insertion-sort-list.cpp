@@ -11,18 +11,33 @@
 class Solution {
 public:
     ListNode* insertionSortList(ListNode* head) {
-        ListNode* i;
-        ListNode* j;
-        int temp;
-        for(i=head;i->next!=nullptr;i=i->next){
-            for(j=i->next;j!=nullptr;j=j->next){
-                if(i->val>j->val){
-                temp=i->val;
-                i->val=j->val;
-                j->val=temp;
-                }
+
+        ListNode* dummy = new ListNode(0);
+
+        ListNode* curr = head;
+
+        while (curr != nullptr) {
+
+            // Save next node before changing curr->next
+            ListNode* next = curr->next;
+
+            // Find where curr should be inserted
+            ListNode* prev = dummy;
+
+            while (prev->next != nullptr &&
+                   prev->next->val < curr->val) {
+
+                prev = prev->next;
             }
+
+            // Insert curr between prev and prev->next
+            curr->next = prev->next;
+            prev->next = curr;
+
+            // Move to next original node
+            curr = next;
         }
-        return head;
+
+        return dummy->next;
     }
 };
