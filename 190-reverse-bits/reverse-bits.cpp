@@ -1,20 +1,14 @@
 class Solution {
 public:
-    int reverseBits(int n) {
-        __int128 k=0;
-        for(int i=0;i<32;i++){
-            k=k*10 + n%2;
-            n=n/2;
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t ans = 0;
 
- }
- int j=0;
- int a=0;
- while(k!=0){
-    a=a+(k%10)*pow(2,j);
-    j++;
+        for (int i = 0; i < 32; i++) {
+            ans = ans << 1;
+            ans = ans | (n & 1);
+            n = n >> 1;
+        }
 
-    k=k/10;
- }
- return a;
+        return ans;
     }
 };
