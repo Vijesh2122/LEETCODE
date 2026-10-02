@@ -8,30 +8,49 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+
 class Solution {
 public:
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        vector<int> a;
-
-        for (int i = 0; i < lists.size(); i++) {
-            ListNode* temp = lists[i];
-
-            while (temp != NULL) {
-                a.push_back(temp->val);
-                temp = temp->next;
-            }
-        }
-
-        sort(a.begin(), a.end());
-
+    ListNode* mergeTwoLists(ListNode* a, ListNode* b) {
         ListNode dummy(0);
         ListNode* tail = &dummy;
 
-        for (int x : a) {
-            tail->next = new ListNode(x);
+        while (a != NULL && b != NULL) {
+            if (a->val <= b->val) {
+                tail->next = a;
+                a = a->next;
+            } else {
+                tail->next = b;
+                b = b->next;
+            }
+
             tail = tail->next;
         }
 
+        tail->next = (a != NULL) ? a : b;
+
         return dummy.next;
+    }
+
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if (lists.empty())
+            return NULL;
+
+        int k = lists.size();
+
+        while (k > 1) {
+            int newK = 0;
+
+            for (int i = 0; i < k; i += 2) {
+                if (i + 1 < k)
+                    lists[newK++] = mergeTwoLists(lists[i], lists[i + 1]);
+                else
+                    lists[newK++] = lists[i];
+            }
+
+            k = newK;
+        }
+
+        return lists[0];
     }
 };
