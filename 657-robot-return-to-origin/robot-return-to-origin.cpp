@@ -1,25 +1,15 @@
 class Solution {
 public:
     bool judgeCircle(string moves) {
-        pair<int,int>ans={0,0};
-        for(int i=0;i<moves.size();i++){
-            char ch=moves[i];
-            switch(ch){
-            case 'U':
-            ans.first++;
-            break;
-            case 'D':
-            ans.first--;
-            break;
-            case 'L':
-            ans.second--;
-            break;
-            case 'R':
-            ans.second++;
-            break;
-            }
+        int x = 0, y = 0;
 
+        for (char ch : moves) {
+            if (ch == 'U') y++;
+            else if (ch == 'D') y--;
+            else if (ch == 'L') x--;
+            else if (ch == 'R') x++;
         }
-        return (ans.first==0 && ans.second==0)?true:false;
+
+        return x == 0 && y == 0;
     }
 };
